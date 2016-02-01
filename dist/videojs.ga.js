@@ -1,6 +1,6 @@
 /*
-* videojs-ga - v0.4.2 - 2015-02-06
-* Copyright (c) 2015 Michael Bensoussan
+* videojs-ga - v0.4.2 - 2016-02-01
+* Copyright (c) 2016 Michael Bensoussan
 * Licensed MIT
 */
 (function() {
@@ -29,6 +29,7 @@
     seeking = false;
     loaded = function() {
       if (!eventLabel) {
+        console.log('currentSrc', this.currentSrc());
         eventLabel = this.currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i, '');
       }
       if (__indexOf.call(eventsToTrack, "loadedmetadata") >= 0) {
@@ -103,13 +104,24 @@
     };
     sendbeacon = function(action, nonInteraction, value) {
       if (window.ga) {
-        ga('send', 'event', {
-          'eventCategory': eventCategory,
-          'eventAction': action,
-          'eventLabel': eventLabel,
-          'eventValue': value,
-          'nonInteraction': nonInteraction
-        });
+        if (dataLayer) {
+          dataLayer.push({
+            'event': eventCategory,
+            'eventCategory': eventCategory,
+            'eventAction': action,
+            'eventLabel': eventLabel,
+            'eventValue': value,
+            'eventNonInteraction': nonInteraction
+          });
+        } else {
+          ga('send', 'event', {
+            'eventCategory': eventCategory,
+            'eventAction': action,
+            'eventLabel': eventLabel,
+            'eventValue': value,
+            'nonInteraction': nonInteraction
+          });
+        }
       } else if (window._gaq) {
         _gaq.push(['_trackEvent', eventCategory, action, eventLabel, value, nonInteraction]);
       } else if (options.debug) {
