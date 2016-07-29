@@ -1,5 +1,5 @@
 /*
-* videojs-ga - v0.4.2 - 2016-02-01
+* videojs-ga - v0.4.2 - 2016-07-29
 * Copyright (c) 2016 Michael Bensoussan
 * Licensed MIT
 */
@@ -29,7 +29,6 @@
     seeking = false;
     loaded = function() {
       if (!eventLabel) {
-        console.log('currentSrc', this.currentSrc());
         eventLabel = this.currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i, '');
       }
       if (__indexOf.call(eventsToTrack, "loadedmetadata") >= 0) {
